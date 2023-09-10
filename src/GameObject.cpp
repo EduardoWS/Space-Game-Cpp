@@ -3,10 +3,10 @@
 
 
 
-GameObject::GameObject(const char *texturesheet, SDL_Renderer *ren, float scale){
+GameObject::GameObject(const char *texturesheet, float scale){
 
-    renderer = ren;
-    objTexture = TextureManager::LoadTexture(texturesheet, ren);
+    
+    objTexture = TextureManager::LoadTexture(texturesheet);
 
     shot_speed = 30;
     shot_flag = false;
@@ -45,6 +45,6 @@ void GameObject::Render(){
     SDL_Point pivot = { static_cast<int>(imgWidth) / 2, static_cast<int>(imgHeight) / 2 };
     
     // Renderize a textura na tela com o ângulo de rotação
-    SDL_RenderCopyEx(renderer, objTexture, NULL, &destRect, rotationAngle, &pivot, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(Game::renderer, objTexture, NULL, &destRect, rotationAngle, &pivot, SDL_FLIP_NONE);
 
 }

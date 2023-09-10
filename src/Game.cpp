@@ -1,10 +1,14 @@
 #include "Game.hpp"
 #include "TextureManager.hpp"
 #include "GameObject.hpp"
+#include "Map.hpp"
 
 
-GameObject *ship;
-GameObject *shot;
+GameObject* ship;
+GameObject* shot;
+Map* map;
+
+SDL_Renderer* Game::renderer = nullptr;
 
 
 Game::Game(){
@@ -42,8 +46,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         spaceshipTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
         SDL_FreeSurface(tmpSurface); */
 
-        ship = new GameObject("assets/images/spaceships/spaceship1-2.png", renderer, 1);
-        shot = new GameObject("assets/images/guns/tiro2.png", renderer, 1);
+        ship = new GameObject("assets/images/spaceships/spaceship1-2.png", 1);
+        shot = new GameObject("assets/images/guns/tiro2.png", 1);
+        map = new Map();
         
         isRunning = true;
 
@@ -121,6 +126,7 @@ void Game::update(){
     //std::cout << cont << "\n";
 
     ship->Update();
+    map->UpdateStars();
 
     if(shot->shot_flag){
         shot->Update();
@@ -134,6 +140,9 @@ void Game::render(){
     SDL_RenderClear(renderer);      // FIRST
 
     //É aqui que ficará as coisas para renderizar
+
+    map->DrawMap();
+
     
     if(shot->shot_flag){
         shot->Render();

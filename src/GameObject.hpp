@@ -6,7 +6,7 @@
 class GameObject{
 
 public:
-    GameObject(const char *texturesheet, SDL_Renderer *ren, float scale=1);
+    GameObject(const char *texturesheet, float scale=1);
     ~GameObject();
 
     SDL_Texture *objTexture;
@@ -38,7 +38,6 @@ private:
 
     
     //SDL_Rect srcRect, destRect;
-    SDL_Renderer *renderer;
 
     // Variáveis relacionadas à nave e ao tiro
     SDL_Rect destRect;
