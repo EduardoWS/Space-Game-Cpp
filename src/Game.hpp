@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "GameObject.hpp"
 
 class Game{
 
@@ -21,11 +22,14 @@ public:
     bool running(){ return isRunning; }
 
 private:
-    bool tiro_flag;
+    
     //int cont = 0;
     bool isRunning;
     SDL_Window *window;
     SDL_Renderer *renderer;
+
+    //GameObject *nave; // Instância para a nave
+    //GameObject *tiro;
 
 };
 
