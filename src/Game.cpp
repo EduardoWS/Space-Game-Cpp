@@ -46,8 +46,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         spaceshipTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
         SDL_FreeSurface(tmpSurface); */
 
-        ship = new GameObject("assets/images/spaceships/spaceship1-2.png", 1);
-        shot = new GameObject("assets/images/guns/tiro2.png", 1);
+        ship = new GameObject("assets/images/spaceships/spaceship3.png", 1);
+        shot = new GameObject("assets/images/guns/tiro2.png", 2);
         map = new Map();
         
         isRunning = true;

@@ -8,11 +8,20 @@ Map::Map(){
     //backgroundTex = TextureManager::LoadTexture("");
     //planetsTex = TextureManager::LoadTexture("");
     starsTex = TextureManager::LoadTexture("assets/images/scenario/star1.png");
-    //galaxyTex = TextureManager::LoadTexture("");
+    nebulosaTex = TextureManager::LoadTexture("assets/images/scenario/nebulosa1.png");
+    planet1Tex = TextureManager::LoadTexture("assets/images/scenario/Planeta1.png");
+    planet2Tex = TextureManager::LoadTexture("assets/images/scenario/Planeta2.png");
+    planet3Tex = TextureManager::LoadTexture("assets/images/scenario/Planeta3.png");
+    galaxiaTex = TextureManager::LoadTexture("assets/images/scenario/galaxia.png");
+    galaxia2Tex = TextureManager::LoadTexture("assets/images/scenario/galaxia2.png");
+    backgroundTex = TextureManager::LoadTexture("assets/images/scenario/background.png");
 
+    //nebulosa
+    neb.duration = rand() % 100 + 50;
+    neb.brightness = 100;
+    neb.soma = false;
 
-    // Aqui você pode gerar estrelas aleatoriamente e adicioná-las ao vetor de estrelas.
-    // Vou criar um exemplo simples com 100 estrelas para começar.
+    // gerar estrelas aleatoriamente e adicioná-las ao vetor de estrelas.
     const int numStars = 500;
     
     for (int i = 0; i < numStars; i++) {
@@ -41,7 +50,33 @@ void Map::LoadMap(){
 
 void Map::DrawMap(){
 
-    // Desenhe as estrelas na tela.
+    
+   
+    SDL_SetTextureAlphaMod(backgroundTex, 40);
+    TextureManager::Draw(backgroundTex, 0, -50, 1300, 1024);
+
+    // gerar nebulosa
+    SDL_SetTextureAlphaMod(nebulosaTex, neb.brightness);
+    TextureManager::Draw(nebulosaTex, 1280/2 - 400, 720/2 - 300, 256, 170);
+
+    //SDL_SetTextureAlphaMod(galaxiaTex, 220);
+    //TextureManager::Draw(galaxiaTex, 380, 330, 430, 200);
+
+    SDL_SetTextureAlphaMod(galaxia2Tex, 150);
+    TextureManager::Draw(galaxia2Tex, 0, 520, 350, 256);
+
+    // gerar planetas
+    SDL_SetTextureAlphaMod(planet1Tex, 200);
+    TextureManager::Draw(planet1Tex, 800, 30, 32, 32);
+
+    SDL_SetTextureAlphaMod(planet2Tex, 200);
+    TextureManager::Draw(planet2Tex, 1280/2 + 500, -10, 128, 128);
+
+    SDL_SetTextureAlphaMod(planet3Tex, 200);
+    TextureManager::Draw(planet3Tex, 30, 10, 64, 64);
+
+
+    // Desenhar as estrelas na tela.
     for (const Star& star : stars) {
         // Use o brilho para simular o efeito de piscar.
         SDL_SetTextureAlphaMod(starsTex, star.brightness);
@@ -49,14 +84,16 @@ void Map::DrawMap(){
         TextureManager::Draw(starsTex, star.x, star.y, star.size, star.size);
     }
 
+    
+
 }
 
 
 
 void Map::UpdateStars() {
-    // Atualize o estado das estrelas, como a duração da piscada e a intensidade do brilho.
+    // Atualizar o estado das estrelas, como a duração da piscada e a intensidade do brilho.
     for (Star& star : stars) {
-        // Reduza a duração da piscada.
+        // Reduzir a duração da piscada.
         star.duration -= 1;
         if(star.brightness > 0)
             star.brightness -= 1;
@@ -67,8 +104,26 @@ void Map::UpdateStars() {
             int y = rand() % 720;
             star.x = x;
             star.y = y;
-            star.duration = rand() % 100 + 50; // Duração aleatória entre 50 e 249
+            star.duration = rand() % 100 + 50; // Duração aleatória entre 50 e 149
             star.brightness = rand() % 256; // Brilho aleatório de 0 a 255
         }
     }
+
+    // nebulosa
+    neb.duration -= 1;
+    
+    if(neb.duration <= 0){
+        neb.duration = rand() % 100 + 20;
+        if(!neb.soma) neb.brightness -= 1;
+        else neb.brightness += 1;
+        
+        if(neb.brightness == 50){
+            neb.soma = true;
+        }
+        if(neb.brightness == 101){
+            neb.soma = false;
+        }
+        
+    }
+    
 }

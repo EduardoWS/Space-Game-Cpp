@@ -12,8 +12,6 @@ public:
     Map();
     ~Map();
 
-    //std::vector <Star> stars;
-
     struct Star{
         int x;
         int y;
@@ -21,6 +19,14 @@ public:
         int brightness;
         int duration;
     };
+
+    struct Nebulosa{
+        bool soma; //somar ou subtrair?
+        int brightness;
+        int duration;
+    };
+
+    Nebulosa neb;
 
     std::vector <Star> stars;
 
@@ -34,9 +40,13 @@ private:
     SDL_Rect src, dest;
 
     SDL_Texture* backgroundTex;
-    SDL_Texture* planetsTex;
+    SDL_Texture* planet1Tex;
+    SDL_Texture* planet2Tex;
+    SDL_Texture* planet3Tex;
     SDL_Texture* starsTex;
-    SDL_Texture* galaxyTex;
+    SDL_Texture* nebulosaTex;
+    SDL_Texture* galaxiaTex;
+    SDL_Texture* galaxia2Tex;
 
     int map[20][25];
 
