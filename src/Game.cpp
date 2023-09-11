@@ -6,6 +6,7 @@
 
 GameObject* ship;
 GameObject* shot;
+GameObject* shot2;
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
@@ -48,6 +49,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
         ship = new GameObject("assets/images/spaceships/spaceship3.png", 1);
         shot = new GameObject("assets/images/guns/tiro2.png", 2);
+        shot2 = new GameObject("assets/images/guns/tiro2.png", 2);
         map = new Map();
         
         isRunning = true;
@@ -108,7 +110,14 @@ void Game::handleEvents(){
                     // Redefina a posição inicial do tiro
                     shot->getDestRect().x = ship->getDestRect().x;
                     shot->getDestRect().y = ship->getDestRect().y;
-                    
+                }
+
+                if (!shot2->shot_flag) { // Verifique se já não está atirando
+                    shot2->shot_flag = true;
+
+                    // Redefina a posição inicial do tiro
+                    shot2->getDestRect().x = ship->getDestRect().x;
+                    shot2->getDestRect().y = ship->getDestRect().y;
                 }
              
             default:
@@ -132,6 +141,10 @@ void Game::update(){
         shot->Update();
     }
 
+    if(shot2->shot_flag){
+        shot2->Update();
+    }
+
      
 }
 
@@ -146,6 +159,9 @@ void Game::render(){
     
     if(shot->shot_flag){
         shot->Render();
+    }
+    if(shot2->shot_flag){
+        shot2->Render();
     }
 
     ship->Render();
