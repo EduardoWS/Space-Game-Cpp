@@ -3,6 +3,8 @@
 #include "GameObject.hpp"
 #include "Map.hpp"
 
+#include "ECS.hpp"
+#include "Components.hpp"
 
 GameObject* ship;
 GameObject* shot;
@@ -11,6 +13,9 @@ GameObject* shot3;
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
+
+Manager manager;
+auto& newPlayer(manager.addEntity());
 
 
 Game::Game(){
@@ -57,6 +62,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         shot2->shot_flag = -1;
         shot3->shot_flag = -1;
         map = new Map();
+
+        newPlayer.addComponent<PositionComponent>();
         
         isRunning = true;
 
@@ -92,13 +99,15 @@ void Game::handleEvents(){
                 //destRect.y += 10;
                 break;
             case SDLK_d:
-                ship->setRotationAngle(90.0);
+                //ship->setRotationAngle(90.0);
+                ship->setRotationAngle(ship->getRotationAngle()+15.0);
                 ship->dir_ship = 1;
                 //ship->getDestRect().x += 10;
                 //destRect.x += 10;
                 break;
             case SDLK_a:
-                ship->setRotationAngle(270.0);
+                //ship->setRotationAngle(270.0);
+                ship->setRotationAngle(ship->getRotationAngle()-15.0);
                 ship->dir_ship = 3;
                 //ship->getDestRect().x -= 10;
                 //destRect.x -= 10;
@@ -164,6 +173,8 @@ void Game::update(){
     if(shot3->shot_flag>=0){
         shot3->Update();
     }
+
+    manager.update();
 
      
 }
