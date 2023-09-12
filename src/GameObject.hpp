@@ -10,8 +10,9 @@ public:
     ~GameObject();
 
     SDL_Texture *objTexture;
-    bool shot_flag;
+    int shot_flag; // 0: cima, 1: direita, 2: baixo, 3: esquerda
     float shot_speed;
+    int dir_ship;   // 0: cima, 1: direita, 2: baixo, 3: esquerda
     int centerX, centerY;
 
     float getRotationAngle() const {

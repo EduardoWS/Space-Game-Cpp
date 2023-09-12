@@ -8,7 +8,7 @@ GameObject::GameObject(const char *texturesheet, float scale){
     
     objTexture = TextureManager::LoadTexture(texturesheet);
 
-    shot_speed = 15;
+    shot_speed = 10;
     shot_flag = false;
 
     rotationAngle = 0.0;
@@ -29,11 +29,40 @@ void GameObject::Update(){
     //destRect.h = scale;
     //destRect.w = scale;
 
-    if(shot_flag){
+    
+
+    switch (shot_flag)
+    {
+    case 0:
         destRect.y -= shot_speed;
         if(destRect.y < -64){
-            shot_flag = false;
+            shot_flag = -1;
         }
+        break;
+
+    case 1:
+        destRect.x += shot_speed;
+        if(destRect.x > 1344){
+            shot_flag = -1;
+        }
+        break;
+
+    case 2:
+        destRect.y += shot_speed;
+        if(destRect.y > 784){
+            shot_flag = -1;
+        }
+        break;
+
+    case 3:
+        destRect.x -= shot_speed;
+        if(destRect.x < -64){
+            shot_flag = -1;
+        }
+        break;
+    
+    default:
+        break;
     }
     
 

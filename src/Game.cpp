@@ -49,9 +49,13 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         SDL_FreeSurface(tmpSurface); */
 
         ship = new GameObject("assets/images/spaceships/spaceship3.png", 1);
+        ship->dir_ship = 0;
         shot = new GameObject("assets/images/guns/tiro1.png", 2);
         shot2 = new GameObject("assets/images/guns/tiro1.png", 2);
         shot3 = new GameObject("assets/images/guns/tiro1.png", 2);
+        shot->shot_flag = -1;
+        shot2->shot_flag = -1;
+        shot3->shot_flag = -1;
         map = new Map();
         
         isRunning = true;
@@ -77,22 +81,26 @@ void Game::handleEvents(){
         switch (event.key.keysym.sym) {
             case SDLK_w:
                 ship->setRotationAngle(0.0);
-                ship->getDestRect().y -= 10;
+                ship->dir_ship = 0;
+                //ship->getDestRect().y -= 10;
                 //destRect.y -= 10;
                 break;
             case SDLK_s:
                 ship->setRotationAngle(180.0);
-                ship->getDestRect().y += 10;
+                ship->dir_ship = 2;
+                //ship->getDestRect().y += 10;
                 //destRect.y += 10;
                 break;
             case SDLK_d:
                 ship->setRotationAngle(90.0);
-                ship->getDestRect().x += 10;
+                ship->dir_ship = 1;
+                //ship->getDestRect().x += 10;
                 //destRect.x += 10;
                 break;
             case SDLK_a:
                 ship->setRotationAngle(270.0);
-                ship->getDestRect().x -= 10;
+                ship->dir_ship = 3;
+                //ship->getDestRect().x -= 10;
                 //destRect.x -= 10;
                 break;
             /* case SDLK_e:
@@ -106,22 +114,22 @@ void Game::handleEvents(){
                 destRect.y -= 6;
                 break; */
             case SDLK_SPACE:
-                if (!shot->shot_flag) { // Verifique se já não está atirando
-                    shot->shot_flag = true;
-
+                if (shot->shot_flag == -1) { // Verifique se já não está atirando
+                    shot->shot_flag = ship->dir_ship;
+                    shot->setRotationAngle(ship->getRotationAngle());
                     // Redefina a posição inicial do tiro
                     shot->getDestRect().x = ship->getDestRect().x;
                     shot->getDestRect().y = ship->getDestRect().y;
-                }else if (!shot2->shot_flag) { // Verifique se já não está atirando
-                    shot2->shot_flag = true;
-
+                }else if (shot2->shot_flag == -1) { // Verifique se já não está atirando
+                    shot2->shot_flag = ship->dir_ship;
+                    shot2->setRotationAngle(ship->getRotationAngle());
                     // Redefina a posição inicial do tiro
                     shot2->getDestRect().x = ship->getDestRect().x;
                     shot2->getDestRect().y = ship->getDestRect().y;
 
-                }else if (!shot3->shot_flag) { // Verifique se já não está atirando
-                    shot3->shot_flag = true;
-
+                }else if (shot3->shot_flag == -1) { // Verifique se já não está atirando
+                    shot3->shot_flag = ship->dir_ship;
+                    shot3->setRotationAngle(ship->getRotationAngle());
                     // Redefina a posição inicial do tiro
                     shot3->getDestRect().x = ship->getDestRect().x;
                     shot3->getDestRect().y = ship->getDestRect().y;
@@ -141,19 +149,19 @@ void Game::update(){
     //cont++;
     //std::cout << cont << "\n";
 
-    ship->Update();
+    //ship->Update();
     map->UpdateStars();
     map->UpdateFallingStars();
 
-    if(shot->shot_flag){
+    if(shot->shot_flag>=0){
         shot->Update();
     }
 
-    if(shot2->shot_flag){
+    if(shot2->shot_flag>=0){
         shot2->Update();
     }
 
-    if(shot3->shot_flag){
+    if(shot3->shot_flag>=0){
         shot3->Update();
     }
 
@@ -169,13 +177,13 @@ void Game::render(){
     map->DrawMap();
 
     
-    if(shot->shot_flag){
+    if(shot->shot_flag>=0){
         shot->Render();
     }
-    if(shot2->shot_flag){
+    if(shot2->shot_flag>=0){
         shot2->Render();
     }
-    if(shot3->shot_flag){
+    if(shot3->shot_flag>=0){
         shot3->Render();
     }
 
