@@ -7,6 +7,7 @@
 GameObject* ship;
 GameObject* shot;
 GameObject* shot2;
+GameObject* shot3;
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
@@ -48,8 +49,9 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         SDL_FreeSurface(tmpSurface); */
 
         ship = new GameObject("assets/images/spaceships/spaceship3.png", 1);
-        shot = new GameObject("assets/images/guns/tiro2.png", 2);
-        shot2 = new GameObject("assets/images/guns/tiro2.png", 2);
+        shot = new GameObject("assets/images/guns/tiro1.png", 2);
+        shot2 = new GameObject("assets/images/guns/tiro1.png", 2);
+        shot3 = new GameObject("assets/images/guns/tiro1.png", 2);
         map = new Map();
         
         isRunning = true;
@@ -110,14 +112,19 @@ void Game::handleEvents(){
                     // Redefina a posição inicial do tiro
                     shot->getDestRect().x = ship->getDestRect().x;
                     shot->getDestRect().y = ship->getDestRect().y;
-                }
-
-                if (!shot2->shot_flag) { // Verifique se já não está atirando
+                }else if (!shot2->shot_flag) { // Verifique se já não está atirando
                     shot2->shot_flag = true;
 
                     // Redefina a posição inicial do tiro
                     shot2->getDestRect().x = ship->getDestRect().x;
                     shot2->getDestRect().y = ship->getDestRect().y;
+
+                }else if (!shot3->shot_flag) { // Verifique se já não está atirando
+                    shot3->shot_flag = true;
+
+                    // Redefina a posição inicial do tiro
+                    shot3->getDestRect().x = ship->getDestRect().x;
+                    shot3->getDestRect().y = ship->getDestRect().y;
                 }
              
             default:
@@ -136,6 +143,7 @@ void Game::update(){
 
     ship->Update();
     map->UpdateStars();
+    map->UpdateFallingStars();
 
     if(shot->shot_flag){
         shot->Update();
@@ -143,6 +151,10 @@ void Game::update(){
 
     if(shot2->shot_flag){
         shot2->Update();
+    }
+
+    if(shot3->shot_flag){
+        shot3->Update();
     }
 
      
@@ -162,6 +174,9 @@ void Game::render(){
     }
     if(shot2->shot_flag){
         shot2->Render();
+    }
+    if(shot3->shot_flag){
+        shot3->Render();
     }
 
     ship->Render();

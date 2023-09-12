@@ -26,11 +26,22 @@ public:
         int duration;
     };
 
+    struct Cadente{
+        bool flag;
+        int x, y;
+        int velocity;
+        //int direcao;    // 0: subindo; 1: direita; 2: descendo; 3: esquerda;
+        int cont;
+    };
+
     Nebulosa neb;
+    Cadente cadente;
 
     std::vector <Star> stars;
+    //std::vector <Cadente> cadentes;
 
     void UpdateStars();
+    void UpdateFallingStars();
 
     void LoadMap();
     void DrawMap();
@@ -47,6 +58,7 @@ private:
     SDL_Texture* nebulosaTex;
     SDL_Texture* galaxiaTex;
     SDL_Texture* galaxia2Tex;
+    SDL_Texture* ECadenteTex;
 
     int map[20][25];
 
