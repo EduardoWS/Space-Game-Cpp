@@ -2,11 +2,13 @@
 #include "TextureManager.hpp"
 #include "Map.hpp"
 #include "ECS/Components.hpp"
+#include "Collision.hpp"
 
 
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
+SDL_Event Game::event;
 
 Manager manager;
 auto& player(manager.addEntity());
@@ -44,12 +46,17 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
             std::cout << "\nRenderer Created!\n";
         }
 
+        map = new Map();
+
         player.addComponent<TransformComponent>();
         player.addComponent<SpriteComponent>("assets/images/spaceships/spaceship3.png");
+        player.addComponent<KeyboardController>();
+        player.addComponent<ColliderComponent>("player");
 
-        alien.addComponent<TransformComponent>(0,0);
+        alien.addComponent<TransformComponent>(0, 360);
         alien.addComponent<SpriteComponent>("assets/images/aliens/alien1.png");
-        
+        alien.addComponent<ColliderComponent>("Alien");
+
         isRunning = true;
 
     }else{
@@ -60,7 +67,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
 void Game::handleEvents(){
 
-    SDL_Event event;
     SDL_PollEvent(&event);
 
     switch (event.type)
@@ -68,37 +74,6 @@ void Game::handleEvents(){
     case SDL_QUIT:
         isRunning = false;
         break;
-    
-    case SDL_KEYDOWN:
-        switch (event.key.keysym.sym) {
-            case SDLK_w:
-                
-                break;
-            case SDLK_s:
-                
-                break;
-            case SDLK_d:
-                
-                break;
-            case SDLK_a:
-                
-                break;
-            /* case SDLK_e:
-                rotationAngle = 45.0; 
-                destRect.x += 8;
-                destRect.y -= 6;
-                break;
-            case SDLK_q:
-                rotationAngle = 315.0; 
-                destRect.x -= 8;
-                destRect.y -= 6;
-                break; */
-            case SDLK_SPACE:
-                
-             
-            default:
-                break;
-        }
     
     default:
         break;
@@ -108,11 +83,18 @@ void Game::handleEvents(){
 
 void Game::update(){
     
+    map->UpdateStars();
+    map->UpdateFallingStars();
+
     manager.refresh();
     manager.update();
 
-    alien.getComponent<TransformComponent>().position.Add(Vector2D(1, 1));
-    
+    if(Collision::AABB(player.getComponent<ColliderComponent>().collider,
+                        alien.getComponent<ColliderComponent>().collider))
+    {
+        player.getComponent<TransformComponent>().scale = 0.5;
+        std::cout << "Alien hit!" << "\n";
+    }
 
      
 }
@@ -125,7 +107,6 @@ void Game::render(){
 
     map->DrawMap();
     manager.draw();
-
 
 
     SDL_RenderPresent(renderer);    // LAST

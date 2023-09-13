@@ -9,7 +9,8 @@ public:
     static SDL_Texture *LoadTexture(const char *filename);
 
     static void Draw(SDL_Texture *texture, int x, int y, int width, int height);
-    //static void Draw(SDL_Texture *texture, SDL_Rect srcRect, SDL_Rect destRect);
+   
+    static void Draw(SDL_Texture *texture, SDL_Rect srcRect, SDL_Rect destRect);
 };
 
 

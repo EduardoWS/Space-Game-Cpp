@@ -54,6 +54,14 @@ Map::Map(){
 
 }
 
+Map::~Map()
+{
+    SDL_DestroyTexture(starsTex);
+    SDL_DestroyTexture(backgroundTex);
+    SDL_DestroyTexture(ECadenteTex);
+}
+
+
 void Map::LoadMap(){
 
 }
@@ -62,11 +70,11 @@ void Map::DrawMap(){
 
     
    
-    /* SDL_SetTextureAlphaMod(backgroundTex, neb.brightness);
+    SDL_SetTextureAlphaMod(backgroundTex, neb.brightness);
     TextureManager::Draw(backgroundTex, 0, -50, 1300, 1024);
 
     SDL_SetTextureAlphaMod(ECadenteTex, 100);
-    TextureManager::Draw(ECadenteTex, cadente.x, cadente.y, 256, 30); */
+    TextureManager::Draw(ECadenteTex, cadente.x, cadente.y, 256, 30); 
 
     // gerar nebulosa
     //SDL_SetTextureAlphaMod(nebulosaTex, neb.brightness);
@@ -90,14 +98,14 @@ void Map::DrawMap(){
 
 
     // Desenhar as estrelas na tela.
-    /* for (const Star& star : stars) {
+    for (const Star& star : stars) {
         // Use o brilho para simular o efeito de piscar.
         SDL_SetTextureAlphaMod(starsTex, star.brightness);
         // Desenhe a estrela na posição (x, y).
         TextureManager::Draw(starsTex, star.x, star.y, star.size, star.size);
     }
 
-    */
+    
 
 }
 
