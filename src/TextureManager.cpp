@@ -23,4 +23,9 @@ void TextureManager::Draw(SDL_Texture *texture, int x, int y, int width, int hei
     destRect.h = height; // Altura da região a ser desenhada na tela.
 
     SDL_RenderCopy(Game::renderer, texture, &srcRect, &destRect); // Renderiza a textura na tela.
-}
+} 
+
+/* void TextureManager::Draw(SDL_Texture *texture, SDL_Rect srcRect, SDL_Rect destRect) {
+    
+    SDL_RenderCopy(Game::renderer, texture, &srcRect, &destRect); // Renderiza a textura na tela.
+} */

@@ -1,21 +1,16 @@
 #include "Game.hpp"
 #include "TextureManager.hpp"
-#include "GameObject.hpp"
 #include "Map.hpp"
+#include "ECS/Components.hpp"
 
-#include "ECS.hpp"
-#include "Components.hpp"
 
-GameObject* ship;
-GameObject* shot;
-GameObject* shot2;
-GameObject* shot3;
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
 
 Manager manager;
-auto& newPlayer(manager.addEntity());
+auto& player(manager.addEntity());
+auto& alien(manager.addEntity());
 
 
 Game::Game(){
@@ -49,21 +44,11 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
             std::cout << "\nRenderer Created!\n";
         }
 
-        /* SDL_Surface *tmpSurface = IMG_Load("assets/images/spaceships/spaceship1-2.png");
-        spaceshipTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
-        SDL_FreeSurface(tmpSurface); */
+        player.addComponent<TransformComponent>();
+        player.addComponent<SpriteComponent>("assets/images/spaceships/spaceship3.png");
 
-        ship = new GameObject("assets/images/spaceships/spaceship3.png", 1);
-        ship->dir_ship = 0;
-        shot = new GameObject("assets/images/guns/tiro1.png", 2);
-        shot2 = new GameObject("assets/images/guns/tiro1.png", 2);
-        shot3 = new GameObject("assets/images/guns/tiro1.png", 2);
-        shot->shot_flag = -1;
-        shot2->shot_flag = -1;
-        shot3->shot_flag = -1;
-        map = new Map();
-
-        newPlayer.addComponent<PositionComponent>();
+        alien.addComponent<TransformComponent>(0,0);
+        alien.addComponent<SpriteComponent>("assets/images/aliens/alien1.png");
         
         isRunning = true;
 
@@ -87,30 +72,16 @@ void Game::handleEvents(){
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
             case SDLK_w:
-                ship->setRotationAngle(0.0);
-                ship->dir_ship = 0;
-                //ship->getDestRect().y -= 10;
-                //destRect.y -= 10;
+                
                 break;
             case SDLK_s:
-                ship->setRotationAngle(180.0);
-                ship->dir_ship = 2;
-                //ship->getDestRect().y += 10;
-                //destRect.y += 10;
+                
                 break;
             case SDLK_d:
-                //ship->setRotationAngle(90.0);
-                ship->setRotationAngle(ship->getRotationAngle()+15.0);
-                ship->dir_ship = 1;
-                //ship->getDestRect().x += 10;
-                //destRect.x += 10;
+                
                 break;
             case SDLK_a:
-                //ship->setRotationAngle(270.0);
-                ship->setRotationAngle(ship->getRotationAngle()-15.0);
-                ship->dir_ship = 3;
-                //ship->getDestRect().x -= 10;
-                //destRect.x -= 10;
+                
                 break;
             /* case SDLK_e:
                 rotationAngle = 45.0; 
@@ -123,26 +94,7 @@ void Game::handleEvents(){
                 destRect.y -= 6;
                 break; */
             case SDLK_SPACE:
-                if (shot->shot_flag == -1) { // Verifique se já não está atirando
-                    shot->shot_flag = ship->dir_ship;
-                    shot->setRotationAngle(ship->getRotationAngle());
-                    // Redefina a posição inicial do tiro
-                    shot->getDestRect().x = ship->getDestRect().x;
-                    shot->getDestRect().y = ship->getDestRect().y;
-                }else if (shot2->shot_flag == -1) { // Verifique se já não está atirando
-                    shot2->shot_flag = ship->dir_ship;
-                    shot2->setRotationAngle(ship->getRotationAngle());
-                    // Redefina a posição inicial do tiro
-                    shot2->getDestRect().x = ship->getDestRect().x;
-                    shot2->getDestRect().y = ship->getDestRect().y;
-
-                }else if (shot3->shot_flag == -1) { // Verifique se já não está atirando
-                    shot3->shot_flag = ship->dir_ship;
-                    shot3->setRotationAngle(ship->getRotationAngle());
-                    // Redefina a posição inicial do tiro
-                    shot3->getDestRect().x = ship->getDestRect().x;
-                    shot3->getDestRect().y = ship->getDestRect().y;
-                }
+                
              
             default:
                 break;
@@ -155,26 +107,12 @@ void Game::handleEvents(){
 }
 
 void Game::update(){
-    //cont++;
-    //std::cout << cont << "\n";
-
-    //ship->Update();
-    map->UpdateStars();
-    map->UpdateFallingStars();
-
-    if(shot->shot_flag>=0){
-        shot->Update();
-    }
-
-    if(shot2->shot_flag>=0){
-        shot2->Update();
-    }
-
-    if(shot3->shot_flag>=0){
-        shot3->Update();
-    }
-
+    
+    manager.refresh();
     manager.update();
+
+    alien.getComponent<TransformComponent>().position.Add(Vector2D(1, 1));
+    
 
      
 }
@@ -186,19 +124,8 @@ void Game::render(){
     //É aqui que ficará as coisas para renderizar
 
     map->DrawMap();
+    manager.draw();
 
-    
-    if(shot->shot_flag>=0){
-        shot->Render();
-    }
-    if(shot2->shot_flag>=0){
-        shot2->Render();
-    }
-    if(shot3->shot_flag>=0){
-        shot3->Render();
-    }
-
-    ship->Render();
 
 
     SDL_RenderPresent(renderer);    // LAST
@@ -207,8 +134,8 @@ void Game::render(){
 
 void Game::clean(){
 
-    SDL_DestroyTexture(ship->objTexture);
-    SDL_DestroyTexture(shot->objTexture);
+    //SDL_DestroyTexture(ship->objTexture);
+    //SDL_DestroyTexture(shot->objTexture);
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
 

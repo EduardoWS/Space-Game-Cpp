@@ -8,7 +8,7 @@ GameObject::GameObject(const char *texturesheet, float scale){
     
     objTexture = TextureManager::LoadTexture(texturesheet);
 
-    shot_speed = 10;
+    shot_speed = SHOT_SPEED;
     shot_flag = false;
 
     rotationAngle = 0.0;
@@ -16,8 +16,8 @@ GameObject::GameObject(const char *texturesheet, float scale){
     SDL_QueryTexture(objTexture, NULL, NULL, &imgWidth, &imgHeight);
     imgWidth = imgWidth * scale;
     imgHeight = imgHeight * scale;
-    centerX = (1280 - static_cast<int>(imgWidth)) / 2;
-    centerY = (720 - static_cast<int>(imgHeight)) / 2;
+    centerX = (WINDOW_WIDTH - static_cast<int>(imgWidth)) / 2;
+    centerY = (WINDOW_HEIGHT - static_cast<int>(imgHeight)) / 2;
     destRect = { centerX, centerY, static_cast<int>(imgWidth), static_cast<int>(imgHeight) };
 
     
