@@ -14,6 +14,12 @@ Manager manager;
 auto& player(manager.addEntity());
 auto& alien(manager.addEntity());
 
+std::vector<ColliderComponent*> Game::colliders;
+
+auto& tile0(manager.addEntity());
+auto& tile1(manager.addEntity());
+auto& tile2(manager.addEntity());
+
 
 Game::Game(){
 
@@ -48,13 +54,17 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
         map = new Map();
 
+        tile0.addComponent<TileComponent>(200, 200, 64, 64, 0);
+        tile0.addComponent<ColliderComponent>("Alien2");
+
         player.addComponent<TransformComponent>();
         player.addComponent<SpriteComponent>("assets/images/spaceships/spaceship3.png");
-        player.addComponent<KeyboardController>();
+        //player.addComponent<KeyboardController>();
         player.addComponent<ColliderComponent>("player");
 
         alien.addComponent<TransformComponent>(0, 360);
         alien.addComponent<SpriteComponent>("assets/images/aliens/alien1.png");
+        alien.addComponent<KeyboardController>();
         alien.addComponent<ColliderComponent>("Alien");
 
         isRunning = true;
@@ -89,13 +99,18 @@ void Game::update(){
     manager.refresh();
     manager.update();
 
-    if(Collision::AABB(player.getComponent<ColliderComponent>().collider,
-                        alien.getComponent<ColliderComponent>().collider))
-    {
-        player.getComponent<TransformComponent>().scale = 0.5;
-        std::cout << "Alien hit!" << "\n";
+    for(auto cc : colliders){
+        Collision::AABB(alien.getComponent<ColliderComponent>(), *cc);
     }
 
+    /* if(Collision::AABB(player.getComponent<ColliderComponent>().collider,
+                        alien.getComponent<ColliderComponent>().collider))
+    {
+        //player.getComponent<TransformComponent>().scale = 1;
+        alien.getComponent<TransformComponent>().velocity * -1;
+        std::cout << "Alien hit!" << "\n";
+    }
+ */
      
 }
 
